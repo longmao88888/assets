@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>资产查询信息</title>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<br><br><br><br>
+    <div align="right" class="col-md-12 column">
+        <form action="/assetsquery" method="post">
+          <input name="query" type="text" placeholder="请输入查询内容">
+          <button typy="submit">查询</button>
+        </form>
+    </div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h3  align="center">
+				资产查询结果
+			</h3>
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>
+							eNode ID
+						</th>
+						<th>
+							Location
+						</th>
+						<th>
+							Time
+						</th>
+						<th>
+							State
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for AssetsId in assets %}
+                    <tr>
+                    {% for i in [1,2,3,4] %}
+                       <td>{{ AssetsId[i] }}</td>
+                    {% endfor %}
+                    </tr>
+                {%endfor%}
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <div align="right" class="col-md-12 column">
+          <form action="/" >
+          <button>关闭</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
