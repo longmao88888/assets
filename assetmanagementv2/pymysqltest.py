@@ -4,6 +4,7 @@ import pymysql
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+# 全局变量
 
 #连接数据库
 db = pymysql.connect("localhost", "root", "", "assetsmanagement", charset='utf8')
@@ -14,39 +15,40 @@ cursor = db.cursor()
 # data = cursor.fetchone()
 #print("Database version: %s " % data)
 
-@app.route('/',methods=['GET'])
+
+@app.route('/', methods=['GET'])
 def query():
+    results=None
     return render_template('assets.html')
 
 
-@app.route('/assetsquery',methods=['POST'])
+@app.route('/assets', methods=['POST'])
 def sqlquery():
-    sqlquery=request.form['query']
-
+    sqlquery = request.form['query']
 
 # SQL 查询语句
     sqlquery="%"+sqlquery+"%"
     sql = "SELECT * FROM 顺德 WHERE 主资产号 LIKE '%s' OR 地址 LIKE  '%s'" % (sqlquery,sqlquery)
-    print(sql)
     try:
         # 执行SQL语句
-        queryerr = 1
         cursor.execute(sql)
         # 获取所有记录列表
         results = cursor.fetchall()
-        if results[0]==None:
+        if results[0] != None:
+           queryerr=1
+        else:
             queryerr=0
+
     except:
         print("Error: unable to fetch data")
         queryerr = 0
 
+    if queryerr == 0:
+        return render_template('assets.html',queryerr=queryerr)
 
-    if queryerr==0:
-        msg = '未查询到相关结果，请确认输入是否正确'
-        return render_template('assetserr.html',msg=msg)
 
     assets = results
-    return render_template('AssetTable.html', assets=assets)
+    return render_template('assets.html', assets=assets)
 
 
 if __name__ == '__main__':

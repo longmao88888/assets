@@ -2,19 +2,115 @@
 <html lang="en">
 <head>
     <title>资产查询</title>
-    <meta charset="UTF-8">
+     <meta charset="UTF-8">
     <!-- 表示根据设备的大小调整页面显示的宽度-->
+    <script type="text/javascript" src="http://127.0.0.1/CarAppStore/js/jquery/jquery-1.9.0.min.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1/CarAppStore/js/jquery/jquery-form.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style type="text/css">
+        .Layer1 {
+            display: none;
+            position:absolute;
+            left: 25%;
+            width: 55%;
+            height: 55%;
+            padding: 20px;
+            border: 2px solid black;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+    </style>
 </head>
 <body><br><br><br>
 <div align="center">
-<h2 >资产查询</h2>
+<h2 >资产查询结果</h2>
 </div>
 <div align="center" class="container">
-    <form action="/assetsquery" method="post">
-        <input name="query" type="text" placeholder="请输入查询内容"autofocus="autofocus">
-        <button  type="submit" >提交</button>
+    <form action="/assets" method="post">
+        <input name="query" type="text" required="required" placeholder="请输入主资产号或地址"autofocus="autofocus">
+        <button  type="submit">提交</button>
+        {% if queryerr==0 %}
+        <p>未查询到相关结果,请确认输入是否正确</p>
+        {% endif %}
     </form>
 </div>
+
+
+{% if assets  %}
+    <style type="text/css">
+        .Layer1 {
+            display: block;
+        }
+    </style>
+    <style type="text/css">
+        .container{
+        display:none;
+    }
+    </style>
+{% endif %}
+
+<div  id="assetsquery" class="Layer1">
+    <div align="right" class="col-md-12 column">
+        <form action="/assets" method="post">
+          <input name="query" type="text" required="required" placeholder="请输入主资产号或地址">
+          <button type="submit">查询</button>
+        </form>
+    </div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h3  align="center">
+				资产查询结果
+			</h3>
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>
+                            主资产号
+						</th>
+						<th>
+							实物ID
+						</th>
+                        <th>
+                            地址
+                        </th>
+						<th>
+							基站（机房）编码
+						</th>
+                        <th>
+                            基站（机房）名称
+                        </th>
+						<th>
+							逾龄日期
+						</th>
+                        <th>
+                            资产原值
+                        </th>
+                        <th>
+                            残值
+                        </th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for AssetsId in assets %}
+                    <tr>
+                    {% for i in [0,24,43,76,77,109,114,116] %}
+                       <td>{{ AssetsId[i] }}</td>
+                    {% endfor %}
+                    </tr>
+                {%endfor%}
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <div align="right" class="col-md-12 column">
+          <form action="/" >
+          <button onClick="Layer1.style.display='none'">关闭</button>
+        </form>
+    </div>
+</div>
+
+
+
 </body>
 </html>

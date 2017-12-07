@@ -9,8 +9,8 @@
 <div class="container">
 <br><br><br><br>
     <div align="right" class="col-md-12 column">
-        <form action="/assetsquery" method="post">
-          <input name="query" type="text" placeholder="请输入查询内容">
+        <form action="/assets" method="post">
+          <input name="query" type="text" required="required" placeholder="请输入主资产号或地址">
           <button typy="submit">查询</button>
         </form>
     </div>
@@ -23,23 +23,35 @@
 				<thead>
 					<tr>
 						<th>
-							eNode ID
+                            主资产号
 						</th>
 						<th>
-							Location
+							实物ID
 						</th>
+                        <th>
+                            地址
+                        </th>
 						<th>
-							Time
+							基站（机房）编码
 						</th>
+                        <th>
+                            基站（机房）名称
+                        </th>
 						<th>
-							State
+							逾龄日期
 						</th>
+                        <th>
+                            资产原值
+                        </th>
+                        <th>
+                            残值
+                        </th>
 					</tr>
 				</thead>
 				<tbody>
                 {% for AssetsId in assets %}
                     <tr>
-                    {% for i in [1,2,3,4] %}
+                    {% for i in [0,24,43,76,77,109,114,116] %}
                        <td>{{ AssetsId[i] }}</td>
                     {% endfor %}
                     </tr>
@@ -54,6 +66,11 @@
         </form>
     </div>
 </div>
+
+
+
+
+
 
 </body>
 </html>
