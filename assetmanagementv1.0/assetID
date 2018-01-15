@@ -1,0 +1,60 @@
+#!usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+import pymysql
+import time
+import easygui
+from match_f import areaandstationlist
+
+starttime = time.clock()
+
+# 连接数据库
+db = pymysql.connect("localhost", "root", "", "assetsmanagement", charset='utf8')
+cursor = db.cursor()
+
+#数据库中存在的资产和基站表
+(areaCHN,stationCHN)=areaandstationlist(cursor)
+area = ['CC', 'NH', 'SD', 'SS', 'GM']
+station = ['JZ', 'SF']
+
+arealist = [area[i] for i in range(len(areaCHN)) if areaCHN[i] in areaCHN]
+# stationlist = [station[i] for i in range(len(stationCHN)) if stationCHN[i] in stationCHN]
+stationlist = station
+ii = 0
+for iarea in areaCHN:
+    area =arealist[ii]
+    ii = ii + 1
+    # 需要匹配资产个数
+    cursor.execute("select count(*)  from %s where 基站（机房）名称 is not NULL " % iarea)
+    linecount = cursor.fetchone()[0]
+
+
+    #判断是否存在ASSETID字段
+    sql = "SHOW COLUMNS FROM %s LIKE 'ASSETID'" % iarea
+    cursor.execute(sql)
+    if cursor.fetchone() == None:
+        sql = "ALTER TABLE %s ADD COLUMN `ASSETID`  varchar(255) NULL FIRST" % iarea
+        cursor.execute(sql)
+    else:
+        Yes_or_No = easygui.buttonbox("资产表中已经含有ASSETID\n是否更新ASSETID?", choices=['Yes', 'No'])
+        if Yes_or_No == 'No':
+            break
+
+    # 插入ASSETID
+    for i in range(linecount):
+        sql="SELECT 主资产号,项 from %s limit %d,1" % (iarea,i)
+        cursor.execute(sql)
+        asset=cursor.fetchone()
+        if asset[1] == '04':
+            assettype = 'SF'
+        else:
+            assettype = 'JZ'
+        ID = str(i).zfill(4)
+        assetID='A'+area+assettype+ID
+
+        cursor.execute("ALTER TABLE %s" % iarea)
+        sqlinsert = "UPDATE %s SET ASSETID = '%s' WHERE 主资产号= '%s'" % (iarea, assetID, asset[0])
+        cursor.execute(sqlinsert)
+
+print(time.clock()-starttime)
+db.close()

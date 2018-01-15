@@ -1,0 +1,26 @@
+#Layer1 {
+    display: block;
+    position:absolute;
+    left: 25%;
+    width: 55%;
+    height: 55%;
+    padding: 20px;
+    border: 2px solid black;
+    background-color: aliceblue;
+    overflow: auto;
+}
+#Layer2 {
+    display: none;
+    position: absolute;
+    left: 25%;
+    width: 55%;
+    height: 55%;
+    padding: 20px;
+    border: 2px solid black;
+    background-color: whitesmoke;
+    overflow: auto;
+    cursor:move;
+}
+#Layer2 .tit {background-color:ghostwhite;cursor:move;}
+#Layer2 .button {font-family:"Segoe UI Light";cursor:default;}
+.hover  {background-color: #cccc00;}
