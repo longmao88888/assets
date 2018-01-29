@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>基站资产查询</title>
+     <meta charset="UTF-8">
+    <!-- 表示根据设备的大小调整页面显示的宽度-->
+    <script src="{{ url_for('static',filename='jquery-3.2.1.min.js')}}"></script>
+    <script  src="{{ url_for('static',filename='tc.all.js')}}"></script>
+    <link  rel="stylesheet" href="{{ url_for('static',filename='info.css')}}"></link>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body><br><br><br>
+
+<div  id="Layer1" >
+    <div align="right" class="col-md-12 column">
+        <form action="{{ url_for('keywordquery')}}" method="post">
+          <input name="query" type="text" required="required" placeholder="请输入基站ID或地址">
+          <button type="submit">查询</button>
+        </form>
+    </div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<h3  align="center">
+				基站信息查询结果
+			</h3>
+			<table id="table0" class="table table-hover table-bordered"，border="1">
+				<thead>
+					<tr>
+						<th>
+                            基站ID
+						</th>
+						<th>
+                            crru
+						</th>
+                        <th>
+                            c基站
+                        </th>
+						<th>
+							c室分站
+						</th>
+                        <th>
+							c直放站
+						</th>
+                        <th>
+							lrru
+						</th>
+                        <th>
+							l基站
+						</th>
+                        <th>
+							资产个数
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for k in range(assets|length) %}
+                    <tr>
+                        <td>
+                        <form>
+                            <p>{{ assets[k][0]}}</p>
+                        </form>
+                        </td>
+                    {% for i in range( 1,assets[k]|length ) %}
+                        <td>
+                        <form>
+                            <a href="javascript:void(0)" onclick="detailinfo(this,{{ i }})">{{ assets[k][i]}}</a>
+                        </form>
+                        </td>
+                    {% endfor %}
+                    </tr>
+                {%endfor%}
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <div align="right" class="col-md-12 column">
+          <form action="/" >
+          <button>关闭</button>
+        </form>
+    </div>
+</div>
+
+<div id="Layer2">
+    <div class="tit"><br/></div>
+    <div class="row clearfix" style="cursor:default; ">
+		<div class="col-md-12 column">
+			<h3  align="center">
+				资产信息查询结果
+			</h3>
+			<table id="tb" class="table table-hover table-bordered" border="30px">
+				<thead>
+					<tr>
+						<th>
+                            ID
+						</th>
+						<th>
+                            地址
+						</th>
+                        <th>
+                            基站（机房）编码
+                        </th>
+						<th>
+							残值
+						</th>
+					</tr>
+				</thead>
+                <tbody  id="infobody" style="border: 5px;"></tbody>
+			</table>
+		</div>
+	</div>
+    <div id="Layer3" style="text-align:center">
+    <input type="button" id="exitinfo"  onclick="exitinfo(this)" value="返回"></input>
+    <input type="button" id="editinfo" style="float: right;" onclick="editinfo(this)" value="编辑"></input>
+    </div>
+</div>
+</body>
+</html>
